@@ -16,6 +16,10 @@ class MainActivityViewModel(private val spentRepository: SpentRepository) : View
     val meessageNotificationLiveData: LiveData<String>
         get() = _messageNotificationLiveData
 
+    private var _spentListLiveData = MutableLiveData<String>()
+    val spentListLiveData: LiveData<String>
+        get() = _spentListLiveData
+
     fun addNewSpent(spentAmount: String, spentDescription: String) {
         viewModelScope.launch {
             if (spentAmount.isNullOrBlank() || spentDescription.isNullOrBlank()) {
@@ -36,10 +40,13 @@ class MainActivityViewModel(private val spentRepository: SpentRepository) : View
     fun getRecentSpent() {
         viewModelScope.launch {
             val spents = spentRepository.getFirst5()
-            Log.d("MainActivity", "getRecentSpent: ${spents.size}")
+            val spentList = mutableListOf<String>()
             spents.forEach { spent ->
-                Log.d("MainActivity", "$spent")
+                spentList.add(spent.spentDescription)
             }
+            val spentListString = spentList.joinToString(",")
+            Log.d("MainActivity", spentListString)
+            _spentListLiveData.postValue(spentListString)
         }
     }
 }

@@ -47,13 +47,18 @@ class MainActivity : AppCompatActivity() {
                 textViewMessage.setText(it)
                 editTextSpentAmount.text.clear()
                 editTextSpentDescription.text.clear()
-                lifecycleScope.launch {
-                    delay(1500)
-                    textViewMessage.text = ""
-                    viewModel.getRecentSpent()
-                }
+                viewModel.getRecentSpent()
             }
+        })
 
+        viewModel.spentListLiveData.observe(this, {
+            lifecycleScope.launch {
+                delay(1500)
+                binding.textViewMessage.setText(it)
+                delay(1500)
+                binding.textViewMessage.text = ""
+
+            }
         })
     }
 }
