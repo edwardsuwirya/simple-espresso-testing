@@ -25,13 +25,7 @@ class MainActivity : AppCompatActivity() {
             buttonAddSpent.setOnClickListener {
                 val spentAmount = editTextSpentAmount.text.toString()
                 val spentDesc = editTextSpentDescription.text.toString()
-                val spentDate = Date()
-                val newSpent = Spent(
-                    spentAmount = spentAmount.toDouble(),
-                    spentDate = spentDate,
-                    spentDescription = spentDesc,
-                )
-                viewModel.addNewSpent(newSpent)
+                viewModel.addNewSpent(spentAmount, spentDesc)
             }
         }
         initViewModel()
@@ -56,6 +50,7 @@ class MainActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     delay(1500)
                     textViewMessage.text = ""
+                    viewModel.getRecentSpent()
                 }
             }
 
