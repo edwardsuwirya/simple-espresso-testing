@@ -29,18 +29,36 @@ class MainActivityViewModelTest {
     }
 
     @Test
-    fun testAddNewSpent_shouldReturnLiveDataSuccessMessage_whenSuccess() {
-        viewModel.addNewSpent("1", "Test New Spent")
+    fun shouldReturnLiveDataSuccessMessage_whenSuccessAddNewSpent() {
+        //Given
+        val spentAmount = "1"
+        val spentDescription = "Test New Spent"
+
+        //When
+        viewModel.addNewSpent(spentAmount, spentDescription)
         val result = viewModel.meessageNotificationLiveData.getOrAwaitValue()
+
+        //Then
         assertThat(result).isEqualTo("Successfully add your spent")
     }
 
     @Test
-    fun testGetRecentSpent_shouldReturnLiveDataSpentListMessage_whenSuccess() {
-        viewModel.addNewSpent("1", "Test New Spent 1")
-        viewModel.addNewSpent("2", "Test New Spent 2")
+    fun shouldReturnLiveDataSpentListMessage_whenSuccessGetRecentSpent() {
+        //Given
+        val spentAmount1 = "1"
+        val spentDescription1 = "Test New Spent 1"
+
+        val spentAmount2 = "2"
+        val spentDescription2 = "Test New Spent 2"
+
+        viewModel.addNewSpent(spentAmount1, spentDescription1)
+        viewModel.addNewSpent(spentAmount2, spentDescription2)
+
+        //When
         viewModel.getRecentSpent()
         val result = viewModel.spentListLiveData.getOrAwaitValue()
+
+        //Then
         assertThat(result).isEqualTo("Test New Spent 1,Test New Spent 2")
     }
 }
