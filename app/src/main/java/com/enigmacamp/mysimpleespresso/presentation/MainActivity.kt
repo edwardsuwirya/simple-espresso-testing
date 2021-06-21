@@ -1,12 +1,12 @@
 package com.enigmacamp.mysimpleespresso.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.enigmacamp.mysimpleespresso.BaseApplication
-import com.enigmacamp.mysimpleespresso.data.Spent
 import com.enigmacamp.mysimpleespresso.databinding.ActivityMainBinding
 import com.enigmacamp.mysimpleespresso.repository.SpentRepository
 import com.enigmacamp.mysimpleespresso.utils.CountingIdlingResourceSingleton
@@ -28,6 +28,11 @@ class MainActivity : AppCompatActivity() {
                 val spentAmount = editTextSpentAmount.text.toString()
                 val spentDesc = editTextSpentDescription.text.toString()
                 viewModel.addNewSpent(spentAmount, spentDesc)
+            }
+
+            buttonViewSpent.setOnClickListener {
+                val intent = Intent(this@MainActivity, SecondActivity::class.java)
+                startActivity(intent)
             }
         }
         initViewModel()
