@@ -9,6 +9,7 @@ import com.enigmacamp.mysimpleespresso.BaseApplication
 import com.enigmacamp.mysimpleespresso.data.Spent
 import com.enigmacamp.mysimpleespresso.databinding.ActivityMainBinding
 import com.enigmacamp.mysimpleespresso.repository.SpentRepository
+import com.enigmacamp.mysimpleespresso.utils.CountingIdlingResourceSingleton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.apply {
             buttonAddSpent.setOnClickListener {
+                CountingIdlingResourceSingleton.increment()
                 val spentAmount = editTextSpentAmount.text.toString()
                 val spentDesc = editTextSpentDescription.text.toString()
                 viewModel.addNewSpent(spentAmount, spentDesc)
@@ -44,7 +46,7 @@ class MainActivity : AppCompatActivity() {
     private fun subscribe() {
         viewModel.meessageNotificationLiveData.observe(this, {
             binding.apply {
-                textViewMessage.setText(it)
+                textViewMessage.text = it
                 editTextSpentAmount.text.clear()
                 editTextSpentDescription.text.clear()
                 viewModel.getRecentSpent()
@@ -52,12 +54,14 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModel.spentListLiveData.observe(this, {
-            lifecycleScope.launch {
+            val job = lifecycleScope.launch {
                 delay(1500)
                 binding.textViewMessage.setText(it)
                 delay(1500)
                 binding.textViewMessage.text = ""
-
+            }
+            job.invokeOnCompletion {
+                CountingIdlingResourceSingleton.decrement()
             }
         })
     }

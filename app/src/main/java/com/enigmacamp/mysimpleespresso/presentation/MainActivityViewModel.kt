@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.enigmacamp.mysimpleespresso.data.Spent
 import com.enigmacamp.mysimpleespresso.repository.SpentRepository
+import com.enigmacamp.mysimpleespresso.utils.CountingIdlingResourceSingleton
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -33,7 +34,6 @@ class MainActivityViewModel(private val spentRepository: SpentRepository) : View
                 spentRepository.addSpent(newSpent)
                 _messageNotificationLiveData.postValue("Successfully add your spent")
             }
-
         }
     }
 
