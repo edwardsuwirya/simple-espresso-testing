@@ -43,8 +43,14 @@ class SecondActivity : AppCompatActivity() {
 
     private fun subscribe() {
         viewModel.spentListLiveData.observe(this, {
-            binding.recyclerViewSpent.adapter = SpentViewAdapter(it)
+            binding.recyclerViewSpent.adapter = SpentViewAdapter(it) {
+                viewModel.getDetailSpent(it)
+            }
             CountingIdlingResourceSingleton.decrement()
+        })
+
+        viewModel.spentDetailLiveData.observe(this, {
+            binding.textViewSpentSelection.text = it.spentDescription
         })
     }
 }

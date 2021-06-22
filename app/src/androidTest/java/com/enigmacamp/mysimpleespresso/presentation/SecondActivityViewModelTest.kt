@@ -43,4 +43,17 @@ class SecondActivityViewModelTest {
         //Then
         Truth.assertThat(result.size).isEqualTo(2)
     }
+
+    @Test
+    fun shouldReturnLiveDataSpent_whenGetDetailSpent() {
+        viewModel.getDetailSpent(
+            Spent(
+                spentAmount = 1.0,
+                spentDescription = "Test 1",
+                spentDate = Date()
+            )
+        )
+        val result = viewModel.spentDetailLiveData.getOrAwaitValue()
+        Truth.assertThat(result.spentDescription).isEqualTo("Test 1")
+    }
 }

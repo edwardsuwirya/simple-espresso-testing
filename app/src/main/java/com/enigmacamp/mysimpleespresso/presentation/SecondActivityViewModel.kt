@@ -1,6 +1,5 @@
 package com.enigmacamp.mysimpleespresso.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,11 +13,18 @@ class SecondActivityViewModel(private val spentRepository: SpentRepository) : Vi
     val spentListLiveData: LiveData<List<Spent>>
         get() = _spentListLiveData
 
+    private var _spentDetailLiveData = MutableLiveData<Spent>()
+    val spentDetailLiveData: LiveData<Spent>
+        get() = _spentDetailLiveData
 
     fun getRecentSpent() {
         viewModelScope.launch {
             val spents = spentRepository.getFirst5()
             _spentListLiveData.postValue(spents)
         }
+    }
+
+    fun getDetailSpent(spent: Spent) {
+        _spentDetailLiveData.value = spent
     }
 }
